@@ -4,7 +4,7 @@
 
 ## Contexte
 
-✏️ *En cinq à huit phrases : qui utilise l'outil (son métier, son geste professionnel), son besoin, ce qu'il saisit, ce que le programme lui affiche, ce que l'outil ne fait pas.*
+Cet outil est conçu pour les techniciens agricoles ou agronomes dans l'optique de suivre l'évolution des caractéristiques de la terre. Par le biais de cette application, ils pourront enregistrer le pH et la texture du sol pour chaque parcelle étudiée à temps réel. Le programme affiche un résumé complet des données, trie les parcelles selon leur acidité et génère des alertes pour des sols très acides (pH < inférieur à 5,5).  Par contre l'outil ne génère pas de prévision des rendements de récolte.
 
 ## Prérequis et lancement
 
@@ -46,4 +46,4 @@ Sous PowerShell, si `npm` est bloqué : `npm.cmd test`.
 
 ## Auteur
 
-✏️ *Prénom NOM, compte GitHub. Entraide : avec qui, sur quoi.*
+✏️ *Salifou CAMARA, compte GitHub. Entraide : avec qui, sur quoi.*
