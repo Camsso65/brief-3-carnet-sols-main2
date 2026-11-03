@@ -25,15 +25,26 @@ export function phMinMax(observations) {
       }
       return{ min,max};
     }
-    
+
 
 // Renvoie un objet : pour chaque texture présente, le nombre d'observations.
 // Exemple : { sableux: 3, limoneux: 4, argileux: 3 }
 // Liste vide : {} (un objet vide).
 export function compterParTexture(observations) {
-  throw new Error('TODO : coder compterParTexture dans src/synthese.js');
-}
+  const compteur = {};
+  for(const observation of observations){
+   const texture = observation.texture; 
+    if(compteur[texture] === undefined) {
+     compteur[observation.texture] = 1;
+    }
+    else {
 
+   compteur[texture]++;
+  } 
+} 
+  return compteur
+  
+}
 // Renvoie un NOUVEAU tableau avec les observations dont le pH est STRICTEMENT inférieur au seuil.
 // Exemple : pointsADiscuter(observations, 5.5) garde 5.4 mais pas 5.5.
 export function pointsADiscuter(observations, seuil) {
