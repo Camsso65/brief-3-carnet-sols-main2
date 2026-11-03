@@ -37,12 +37,41 @@ export function trouverParId(observations, id) {
 // · texture présente dans TEXTURES · pH nombre entre 0 et 14 (bornes comprises)
 // · etatHumidite présent dans HUMIDITES. N'ajoutez aucune autre règle que celles-ci.
 export function verifierObservation(saisie, observations) {
-  throw new Error('TODO : coder verifierObservation dans src/registre.js');
+  const erreur=[];
+  if (saisie.id===""){
+    erreur.push("id est obligation"); }
+  else{
+    for (const obsv of observations){
+      if (obsv.id===saisie.id) {
+        erreur.push("id est existe déjà")
+      }
+       }
+  }
+  if (TEXTURES.includes(saisie.texture)){
+    observations.texture=saisie.texture;}
+   else {
+erreur.push ("la texture est forcement sableux, argileux ou limoneux")
+}
+const k = Number(saisie.pH.replace(',','.'));
+if(saisie.pH ===''|| isNaN(k) || k < 0 || k >14){
+  erreur.push("veuillez entrer un pH valide compris entre 0 et 14");
+}
+
+if(saisie.parcelle.trim()===''){
+  erreur.push("veuillez entrer obligatoirement une parcellle validé");
+}
+
+if(!HUMIDITES.includes(saisie.etatHumidite)){
+  erreur.push("Veuillez entrer une humidité valide:${HUMIDITES}");
+}
+return erreur
 }
 
 // Fabrique l'observation à enregistrer à partir d'une saisie VALIDE : pH devient un nombre.
 export function creerObservation(saisie) {
-  throw new Error('TODO : coder creerObservation dans src/registre.js');
+  const observation = {...saisie};
+  observation.pH = Number(saisie.pH.replace(',','.'));
+  return observation;
 }
 
 // Ajoute la saisie au carnet si elle est valide (verifierObservation, puis creerObservation).
