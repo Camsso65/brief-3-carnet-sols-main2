@@ -4,7 +4,6 @@
 
 ## Contexte
 
-
 ## Prérequis et lancement
 
 - Node.js 20 ou plus récent, Git ; aucune bibliothèque à installer.
@@ -45,4 +44,8 @@ Sous PowerShell, si `npm` est bloqué : `npm.cmd test`.
 
 ## Auteur
 
+<<<<<<< HEAD
 ✏️ *Nom Prenom, compte GitHub. Entraide : avec qui, sur quoi.*
+=======
+✏️ *NOM Prenom, compte GitHub. Entraide : avec qui, sur quoi.*
+>>>>>>> 71a93fc530823f74afa719739bc5462c9cd5d328
