@@ -28,17 +28,41 @@ return conserveSuppression[0]
 // Erreurs : identifiant introuvable · champ 'id' (non modifiable) · champ absent de CHAMPS_MODIFIABLES
 //           · valeur refusée par les règles de l'ajout.
 export function modifierObservation(observations, id, champ, valeur) {
-  throw new Error('TODO Bonus : coder modifierObservation dans src/bonus.js');
+  const erreurs=[]; 
+  const observation= observations.find(obs => obs.id === id);
+  
+  if(!observation){
+    erreurs.push("Identifiant introuvable");
+    return erreurs;
+  }
+  if (champ ==='id') {
+    erreurs.push("champ 'id'n'est pas modifiable");
+    return erreurs;
+  }
+  if (!CHAMPS_MODIFIABLES.includes(champ)){
+    erreurs.push("champ absent des champs modifiables autorisés");
+    return erreurs;
+  }
+  let valeurTraitee = valeur;
+  if(champ==='pH'){
+    valeurTraitee= Number(versNombre(valeur));
+    if (isNaN(valeurTraitee) || valeurTraitee<0 || valeurTraitee>14) {
+      erreurs.push("la valeur du pH doit etre un nombre valide compris entre 0 et 14");
+    }
+  }
+  if(erreurs.length> 0) {
+      return erreurs;
+  }
+  
+  observation[champ]=valeurTraitee;
+    return [];
+  
 }
 
+
 // Renvoie une COPIE triée par pH décroissant. Le tableau reçu ne doit pas changer d'ordre.
-export function trierParPhDecroissant(observations) {
-  throw new Error('TODO Bonus : coder trierParPhDecroissant dans src/bonus.js');
-}
+
 
 // Renvoie { texture, nombre } pour la texture la plus fréquente, ou null si la liste est vide.
 // En cas d'égalité, la première texture rencontrée l'emporte.
 // Exemple : { texture: 'limoneux', nombre: 4 }
-export function textureLaPlusFrequente(observations) {
-  throw new Error('TODO Bonus : coder textureLaPlusFrequente dans src/bonus.js');
-}

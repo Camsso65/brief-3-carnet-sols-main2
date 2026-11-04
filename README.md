@@ -3,6 +3,7 @@
 > Projet individuel du SAS DFS, brief 3 (sujet : [SUJET.md](SUJET.md)). Remplacez chaque ✏️ par votre texte, puis supprimez cette ligne.
 
 ## Contexte
+Ce outil est conçu pour les techniciens agricoles ainsi qu'aux agronomes dans l'optique de suivre l'évolution des caractéristiques du sol. Par le biais de cette application, ils pourront enregistrer le pH et la texture du sol pour chaque parcelle à temps réel. Le programme affiche un résumé complet des données, trie les parcelles selon leur acidité et génère des alertes pour des sols très acides(pH < inférieur à (5,5)). Par contre l'outil ne génère pas de prévision des rendements de récolte.
 
 ## Prérequis et lancement
 
@@ -44,8 +45,4 @@ Sous PowerShell, si `npm` est bloqué : `npm.cmd test`.
 
 ## Auteur
 
-<<<<<<< HEAD
-✏️ *Nom Prenom, compte GitHub. Entraide : avec qui, sur quoi.*
-=======
 ✏️ *NOM Prenom, compte GitHub. Entraide : avec qui, sur quoi.*
->>>>>>> 71a93fc530823f74afa719739bc5462c9cd5d328
