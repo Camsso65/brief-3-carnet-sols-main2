@@ -22,22 +22,27 @@ Sous PowerShell, si `npm` est bloqué : `npm.cmd test`.
 
 ✏️ *Cochez seulement ce qui marche : `- [x]`.*
 
-- [ ] Données lues et enregistrées dans `donnees/observations.json`
-- [ ] Ajouter une observation, saisies invalides refusées sans arrêter le programme
-- [ ] Lister les observations, message si le carnet est vide
-- [ ] Rechercher par point ou par parcelle ; filtrer par texture
-- [ ] Trier par pH
-- [ ] Synthèse : pH minimum et maximum, nombre par texture, points à discuter (pH < 5,5)
-- [ ] Bonus : supprimer et modifier une observation (choix 6 et 7)
-- [ ] Bonus : tri par pH décroissant, texture la plus fréquente
+- [ X] Données lues et enregistrées dans `donnees/observations.json`
+- [ X] Ajouter une observation, saisies invalides refusées sans arrêter le programme
+- [ X] Lister les observations, message si le carnet est vide
+- [ X] Rechercher par point ou par parcelle ; filtrer par texture
+- [ X] Trier par pH
+- [ X] Synthèse : pH minimum et maximum, nombre par texture, points à discuter (pH < 5,5)
+- [ X] Bonus : supprimer et modifier une observation (choix 6 et 7)
+- [ X] Bonus : tri par pH décroissant, texture la plus fréquente
 
 ## Données
 
-✏️ *Le fichier, le nombre d'observations, les champs (voir [docs/dictionnaire-donnees.md](docs/dictionnaire-donnees.md)), le pH sans unité. Rappelez qu'elles sont fictives.*
+| Champ  | Signification                   | Type                       | Règle de validation          | Unité | Exemple |
+| `id`   Identifiant unique                | texte                      | non vide, absent des données | —     | ✏️     |
+|Parcelle|Identifiant de la parcelle       |Chaine de caractère(string) |non vide                      | -     |  P2
+|Texture |Type de texture physique du sol  |chaine de caractère(string) |Non vide                      | -     |argileux|
+| pH     | Potentiel hydrogène             | Nombre(number)             |compris entre 0 - 14          | -     | 5,5    |
+| etatHumidite | Humidité du sol           |chaine de caractère(string) |Non vide                      | -     |sec     |
 
 ## Limites
 
-✏️ *Au moins trois. Par exemple : le carnet repère des valeurs à discuter, mais ne produit aucun diagnostic de fertilisation.*
+Le carnet ne nous permet pas de prevoir les recoltes, il ne montre pas non plus la fertilité des parcelles ou encore le géoréferencement de ces parcelles.
 
 ## Documents
 
@@ -45,4 +50,4 @@ Sous PowerShell, si `npm` est bloqué : `npm.cmd test`.
 
 ## Auteur
 
-✏️ *NOM Prenom, compte GitHub. Entraide : avec qui, sur quoi.*
+ CAMARA Salifou, [compte GitHub](https://github.com/Camsso65/brief-3-carnet-sols-main2/commits/main/). Entraide : Mes condisciples de classe, pour la meilleure comprehension du sujet et des syntaxes. J'ai également eu recours à l'IA Gemini, pour mieux comprendre certaines notions et le site Mdn egalement. 

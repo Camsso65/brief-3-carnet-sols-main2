@@ -6,13 +6,13 @@
 
 **Essais dans le menu** : un ajout valide (encore là après redémarrage), chaque règle refusée, une recherche introuvable, chaque tri, la synthèse, un choix inconnu.
 
-| Action | Attendu | Obtenu | Testeur |
-| --- | --- | --- | --- |
-| ✏️ | | | |
-| ✏️ | | | |
-| ✏️ | | | |
-| ✏️ | | | |
-| ✏️ | | | |
+| Action       | Attendu | Obtenu | Testeur |
+|  | --- | --- | --- |
+| Ajouter une observatipon | | | |
+| Recherche par texture | | | |
+| Recherche par parcelle | | | |
+| Tier par pH | | | |
+| Stynthèse des observations | | | |
 | ✏️ | | | |
 
 **Sur un autre poste** (`git clone`, `node app.js`, `npm test`, en suivant le README) : ✏️

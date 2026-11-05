@@ -43,7 +43,7 @@ export function verifierObservation(saisie, observations) {
   else{
     for (const obsv of observations){
       if (obsv.id===saisie.id) {
-        erreur.push("id est existe déjà")
+        erreur.push("id existe déjà")
       }
        }
   }
