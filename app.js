@@ -10,10 +10,199 @@ import { SEUIL_PH_A_DISCUTER, compterParTexture, phMinMax, pointsADiscuter } fro
 
 const FICHIER_DONNEES = 'donnees/observations.json';
 
+            //---------------AFFICHAGE---------------//
+
+function afficherAccueil(){
+  console.log('=============================================');
+  console.log('             Ferme pedagogique               ');
+  console.log('=============================================');
+}
+function afficherMenu(){
+  console.log('');
+  console.log('---------------------MENU-------------------');
+  console.log('1. Ajouter une observation');
+  console.log('2. Lister les observations');
+  console.log('3. Rechercher(point,parcelle,texture)');
+  console.log('4. Trier par PH');
+  console.log('5. Syntèse des observations');
+  console.log('0.Quitter');
+}
+          //-----------------ACTIONS---------------
+
+//Choix 1: Poser les cinq questions, ajouter, enregister.
+async function ajouter(observations){
+  console.log('---Ajouter une observation---');
+  
+  const id = await demander ('Point observé (ex.S11):');
+  if (id === null) return;
+  const parcelle = await demander('parcelle (ex.P1):');
+  if(parcelle === null)return;
+  const texture = await demander(`texture (${TEXTURES.join(',')}): `);
+  if (texture === null) return;
+  const pH = await demander('pH (nombre de 0 à 14, sans unité, virgule acceptée):');
+  if(pH === null) return;
+  const etatHumidite = await demander (`Etat d'humidité(${HUMIDITES.join(',')}) : `);
+  if (etatHumidite === null) return;
+
+   // Normalisation avant vérification : majuscules pour le point et la parcelle,
+  // minuscules pour la texture et l'état d'humidité, le pH reste tel quel.
+  const saisie = {
+    id: id.toUpperCase (),
+    parcelle: parcelle.toUpperCase (),
+    texture: texture.toLowerCase (),
+    pH,
+    etatHumidite: etatHumidite.toLowerCase (),
+  };
+  const erreurs = ajouterObservation(observations, saisie);
+  if (erreurs.length > 0) {
+    console.log('Observation refusée :');
+    for (const erreur of erreurs) {
+      console.log(`  - ${erreur}`);
+    }
+    console.log(`Le carnet compte toujours ${observations.length} observation(s).`);
+    return;
+  }
+  await enregistrerJson(FICHIER_DONNEES, observations);
+  console.log(`Observation ${saisie.id} ajoutée. Le carnet compte ${observations.length} observation(s).`);
+}
+// Choix 2 : lister.
+function lister(observations) {
+  console.log(`--- Liste des observations (${observations.length}) ---`);
+  console.log(listerObservations(observations));
+}
+// Choix 3 : rechercher par point, parcelle ou texture.
+async function rechercher(observations) {
+  console.log('--- Rechercher ---');
+  console.log('1. Par point (identifiant)');
+  console.log('2. Par parcelle');
+  console.log('3. Les observations d\'une texture');
+  const sousChoix = await demander('Votre choix : ');
+  if (sousChoix === null) return;
+
+  switch (sousChoix) {
+    case '1': {
+      const saisie = await demander('Point : ');
+      if (saisie === null) return;
+      const id = saisie.toUpperCase();
+      const observation = trouverParId(observations, id);
+      console.log(observation === undefined ? `Observation ${id} introuvable.` : formaterObservation(observation));
+      break;
+    }
+    case '2': {
+      const saisie = await demander('Parcelle : ');
+      if (saisie === null) return;
+      const parcelle = saisie.toUpperCase();
+      const trouvees = filtrerParParcelle(observations, parcelle);
+      console.log(`${trouvees.length} observation(s) sur la parcelle ${parcelle} :`);
+      console.log(listerObservations(trouvees));
+      break;
+    }
+    case '3': {
+      const saisie = await demander('Texture : ');
+      if (saisie === null) return;
+      const texture = saisie.toLowerCase();
+      const trouvees = filtrerParTexture(observations, texture);
+      console.log($`{trouvees.length} observation(s) de texture ${texture} :`);
+      console.log(listerObservations(trouvees));
+      break;
+    }
+    default:
+      console.log('Choix inconnu : retour au menu.');
+  }
+}
+// Choix 4 : trier par pH (le carnet d'origine ne change pas d'ordre).
+async function trier(observations) {
+  console.log('--- Trier ---');
+  console.log('1. Par pH croissant');
+  const sousChoix = await demander('Votre choix : ');
+  if (sousChoix === null) return;
+
+  if (sousChoix === '1') {
+    console.log(listerObservations(trierParPh(observations)));
+  } else {
+    console.log('Choix inconnu : retour au menu.');
+  }
+}
+//---- Choix 5 : synthèse----.
+function synthese(observations) {
+  console.log('--- Synthèse des observations ---');
+  console.log(`Nombre d'observations : ${observations.length}`);
+
+  const bornes = phMinMax(observations);
+  if (bornes === null) {
+    console.log('pH minimum et maximum : aucune donnée');
+  } else {
+    console.log(`pH minimum : ${bornes.min} · pH maximum : ${bornes.max}`);
+  }
+  console.log('Observations par texture :');
+  for (const [texture, nombre] of Object.entries(compterParTexture(observations))) {
+    console.log(`  ${texture} : ${nombre}`);
+  }
+  const aDiscuter = pointsADiscuter(observations, SEUIL_PH_A_DISCUTER);
+  console.log(`Points à discuter avec le coach (pH < ${SEUIL_PH_A_DISCUTER}) : ${aDiscuter.length}`);
+  for (const observation of aDiscuter) {
+    console.log(`  ${formaterObservation(observation)}`);
+  }
+  console.log('Rappels : le pH est sans unité. Aucune moyenne de pH n\'est calculée (échelle logarithmique).');
+  console.log('Ces points ne sont pas un diagnostic de fertilisation : ils servent à préparer l\'échange avec le coach.');
+}
+// ---------- Programme principal ----------
+
 async function main() {
   ouvrirSaisie();
-  console.log("À compléter : écrivez le menu dans app.js (fiches/3-ajouter-lister.md).");
+  afficherAccueil();
+
+  //----Chargement des données : si ça échoue, on continue avec un carnet vide----.
+  let observations = [];
+  try {
+    observations = await chargerJson(FICHIER_DONNEES);
+    console.log(`${observations.length} observation(s) chargée(s) depuis ${FICHIER_DONNEES}.`);
+  } catch (erreur) {
+    console.log(`Impossible de lire ${FICHIER_DONNEES} : ${erreur.message}. Le carnet démarre vide.`);
+    observations = [];
+  }
+  let continuer = true;
+  while (continuer) {
+    afficherMenu();
+    const choix = await demander('Votre choix : ');
+
+    // Saisie fermée (Ctrl+C) : on quitte.
+    if (choix === null) {
+      break;
+    }
+    try {
+      switch (choix) {
+        case '1':
+          await ajouter(observations);
+          break;
+        case '2':
+          lister(observations);
+          break;
+        case '3':
+          await rechercher(observations);
+          break;
+        case '4':
+          await trier(observations);
+          break;
+        case '5':
+          synthese(observations);
+          break;
+        case '0':
+          console.log('Au revoir !');
+          continuer = false;
+          break;
+        default:
+          console.log(`Choix inconnu : « ${choix} ». Tapez un chiffre du menu.`);
+      }
+    } catch (erreur) {
+      // Aucune erreur n'arrête le programme : le menu revient toujours.
+      if (String(erreur.message).startsWith('TODO')) {
+        console.log(`À compléter : ${erreur.message}`);
+      } else {
+        console.log(`Erreur inattendue : ${erreur.message}`);
+      }
+    }
+  }
   fermerSaisie();
 }
-
 main();
